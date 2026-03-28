@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ledison — Yarını Aydınlat</title>
+  <meta name="description" content="Ledison; enerji verimliliğine ve karbon emisyonlarının azaltılmasına odaklanarak yenilikçi LED aydınlatma, ampul, sensör ve akıllı aydınlatma çözümleri sunar."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #080a08;
+      --deep:    #0d1210;
+      --panel:   #111a14;
+      --border:  #1e2e22;
+      --muted:   #3a4e3e;
+      --text:    #c8d9cc;
+      --light:   #e8f0ea;
+      --white:   #f2f7f3;
+      --lime:    #b6ff4e;
+      --lime2:   #d4ff88;
+      --glow:    rgba(182,255,78,0.18);
+      --glowmd:  rgba(182,255,78,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed; top: 0; left: 0;
+      width: 12px; height: 12px;
+      background: var(--lime);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      position: fixed; top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1px solid var(--lime);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.5;
+      transform: translate(-50%, -50%);
+      transition: transform 0.35s ease, opacity 0.3s ease;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--deep); }
+    ::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 2px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: linear-gradient(to bottom, rgba(8,10,8,0.97), transparent);
+      transition: background 0.4s;
+    }
+    nav.scrolled { background: rgba(8,10,8,0.97); border-bottom: 1px solid var(--border); }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--lime); }
+
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--lime); }
+
+    .nav-cta {
+      padding: 0.55rem 1.4rem;
+      border: 1px solid var(--lime);
+      color: var(--lime) !important;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--lime) !important; color: var(--black) !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 4rem 4rem;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 70% 40%, rgba(182,255,78,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 70%, rgba(182,255,78,0.04) 0%, transparent 70%),
+        var(--black);
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.4;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 1200px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--lime);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--lime);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 8vw, 8rem);
+      line-height: 0.92;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      margin-bottom: 1.8rem;
+      animation: fadeUp 0.8s 0.1s ease both, flicker 6s 2s ease-in-out infinite;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--lime);
+      text-shadow: 0 0 40px rgba(182,255,78,0.4);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--text);
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 2.4rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+    .btn-primary {
+      padding: 0.85rem 2.2rem;
+      background: var(--lime);
+      color: var(--black);
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 24px rgba(182,255,78,0.25);
+    }
+    .btn-primary:hover {
+      background: var(--lime2);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(182,255,78,0.45);
+    }
+    .btn-outline {
+      padding: 0.85rem 2.2rem;
+      border: 1px solid var(--muted);
+      color: var(--text);
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--lime); color: var(--lime); }
+
+    /* Hero Visual */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      animation: fadeIn 1.2s 0.4s ease both;
+    }
+
+    .bulb-wrap {
+      position: relative;
+      width: 320px; height: 420px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .bulb-glow-outer {
+      position: absolute;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(182,255,78,0.12) 0%, transparent 70%);
+      top: 20px;
+      animation: pulse 3s ease-in-out infinite;
+    }
+    .bulb-svg { position: relative; z-index: 1; filter: drop-shadow(0 0 30px rgba(182,255,78,0.5)); }
+
+    .bulb-stats {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: space-around;
+    }
+    .stat-chip {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.7rem 1rem;
+      text-align: center;
+    }
+    .stat-chip .val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      color: var(--lime);
+      line-height: 1;
+    }
+    .stat-chip .lbl {
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* TICKER */
+    .ticker {
+      background: var(--lime);
+      color: var(--black);
+      padding: 0.7rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-flex;
+      animation: tickerScroll 28s linear infinite;
+    }
+    .ticker-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0 3rem;
+    }
+    .ticker-sep { opacity: 0.4; margin: 0 0.5rem; }
+
+    /* SECTION BASE */
+    section { padding: 7rem 4rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--lime);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--lime); }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      color: var(--white);
+      line-height: 1;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.2rem;
+    }
+    .section-title em { font-style: normal; color: var(--lime); }
+
+    /* PRODUCTS */
+    .products { background: var(--deep); }
+
+    .products-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+      margin-bottom: 4rem;
+    }
+    .products-intro p { font-weight: 300; line-height: 1.8; color: var(--text); max-width: 440px; }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .product-card {
+      background: var(--panel);
+      padding: 2.4rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+      cursor: none;
+    }
+    .product-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--lime);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .product-card:hover { background: #131d15; }
+    .product-card:hover::after { transform: scaleX(1); }
+
+    .product-icon {
+      width: 52px; height: 52px;
+      background: var(--glowmd);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.6rem;
+      font-size: 1.5rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .product-card:hover .product-icon {
+      border-color: var(--lime);
+      background: var(--glow);
+    }
+
+    .product-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--white);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+    }
+    .product-desc { font-size: 0.88rem; font-weight: 300; line-height: 1.7; color: var(--muted); }
+    .product-card:hover .product-desc { color: var(--text); }
+
+    /* VALUES */
+    .values-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .values-list { margin-top: 2.4rem; }
+    .value-item {
+      display: flex;
+      gap: 1.4rem;
+      padding: 1.6rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .value-item:first-child { border-top: 1px solid var(--border); }
+
+    .value-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--lime);
+      margin-top: 4px;
+      min-width: 28px;
+    }
+    .value-body h4 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+    .value-body p { font-size: 0.88rem; font-weight: 300; color: var(--muted); line-height: 1.7; }
+
+    .values-chart-wrap { position: relative; }
+    .values-chart-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(ellipse at center, rgba(182,255,78,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .emission-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.4rem;
+    }
+    .emission-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.8rem;
+    }
+    .emission-bars { display: flex; flex-direction: column; gap: 1.2rem; }
+    .emission-row { display: flex; flex-direction: column; gap: 0.5rem; }
+    .emission-meta { display: flex; justify-content: space-between; font-size: 0.8rem; }
+    .emission-label { color: var(--text); font-weight: 400; }
+    .emission-val { font-family: 'Space Mono', monospace; color: var(--lime); }
+    .emission-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .emission-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--lime), var(--lime2));
+      border-radius: 3px;
+      animation: barGrow 1.5s ease both;
+      animation-delay: var(--delay, 0s);
+    }
+
+    .emission-footer {
+      margin-top: 2rem;
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .emission-footer .big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--lime);
+      line-height: 1;
+    }
+    .emission-footer .caption { font-size: 0.82rem; font-weight: 300; color: var(--muted); line-height: 1.5; }
+
+    /* FEATURES */
+    .features { background: var(--deep); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .feature-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover { border-color: var(--lime); transform: translateY(-4px); }
+
+    .feature-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 1.2rem;
+    }
+    .feature-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+    }
+    .feature-card p { font-size: 0.88rem; font-weight: 300; color: var(--muted); line-height: 1.75; }
+    .feature-card:hover p { color: var(--text); }
+
+    .feature-num {
+      position: absolute;
+      bottom: 1.5rem; right: 1.5rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      color: var(--border);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .feature-card:hover .feature-num { color: rgba(182,255,78,0.08); }
+
+    /* TESTIMONIALS */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    .testi-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+    }
+    .testi-stars { color: var(--lime); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    .testi-text { font-size: 0.92rem; font-weight: 300; color: var(--text); line-height: 1.75; font-style: italic; margin-bottom: 1.4rem; }
+    .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+    .testi-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      color: var(--lime);
+      font-family: 'Space Mono', monospace;
+      border: 1px solid var(--muted);
+    }
+    .testi-name { font-size: 0.84rem; font-weight: 500; color: var(--white); }
+    .testi-role { font-size: 0.72rem; color: var(--muted); }
+
+    /* CTA BAND */
+    .cta-band {
+      background: var(--lime);
+      padding: 5rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(8,10,8,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,10,8,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .cta-band h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 7rem);
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.2rem;
+    }
+    .cta-band p {
+      font-size: 1.05rem;
+      color: rgba(8,10,8,0.65);
+      max-width: 520px;
+      margin: 0 auto 2.4rem;
+    }
+    .btn-dark {
+      display: inline-block;
+      padding: 1rem 2.8rem;
+      background: var(--black);
+      color: var(--lime);
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-dark:hover { background: var(--deep); transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid var(--border);
+      padding: 4rem;
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .footer-logo span { color: var(--lime); }
+    .footer-about { font-size: 0.84rem; font-weight: 300; color: var(--muted); line-height: 1.8; }
+    .footer-col h5 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 1.4rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.7rem; }
+    .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.86rem; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--text); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+    .footer-bottom span.accent { color: var(--lime); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.08); opacity: 0.7; }
+    }
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes barGrow {
+      from { width: 0 !important; }
+    }
+    @keyframes flicker {
+      0%,100% { opacity: 1; }
+      92%      { opacity: 1; }
+      93%      { opacity: 0.7; }
+      94%      { opacity: 1; }
+      97%      { opacity: 0.85; }
+      98%      { opacity: 1; }
+    }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-inner, .products-intro, .values-wrap { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 1.2rem 1.5rem; }
+      section { padding: 5rem 1.5rem; }
+      .hero { padding: 6rem 1.5rem 3rem; }
+      .products-grid, .features-grid, .testi-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 0.8rem; text-align: center; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a href="#" class="nav-logo">LEDISON<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#products">Ürünler</a></li>
+      <li><a href="#mission">Misyon</a></li>
+      <li><a href="#technology">Teknoloji</a></li>
+      <li><a href="#contact" class="nav-cta">İletişime Geç</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Yeni Nesil Aydınlatma Çözümleri</p>
+        <h1 class="hero-title">
+          Yarını<br/><em>Bugünden</em><br/>Aydınlat
+        </h1>
+        <p class="hero-desc">
+          Ledison, ev ve işyerleri için en ileri LED teknolojiyi sunar—
+          maksimum enerji verimliliği, minimum çevresel etki
+          ve olağanüstü performans için tasarlanmıştır.
+        </p>
+        <div class="hero-actions">
+          <a href="#products" class="btn-primary">Ürünleri Keşfet</a>
+          <a href="#mission" class="btn-outline">Misyonumuz</a>
+        </div>
+      </div>
+
+      <!-- Hero Visual: SVG Bulb -->
+      <div class="hero-visual">
+        <div class="bulb-wrap">
+          <div class="bulb-glow-outer"></div>
+          <svg class="bulb-svg" width="240" height="300" viewBox="0 0 240 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g opacity="0.4">
+              <line x1="120" y1="20" x2="120" y2="0"  stroke="#b6ff4e" stroke-width="1.5"/>
+              <line x1="170" y1="36" x2="185" y2="18" stroke="#b6ff4e" stroke-width="1.5"/>
+              <line x1="204" y1="70" x2="222" y2="58" stroke="#b6ff4e" stroke-width="1.5"/>
+              <line x1="70"  y1="36" x2="55"  y2="18" stroke="#b6ff4e" stroke-width="1.5"/>
+              <line x1="36"  y1="70" x2="18"  y2="58" stroke="#b6ff4e" stroke-width="1.5"/>
+            </g>
+            <ellipse cx="120" cy="110" rx="76" ry="82" fill="url(#bulbGrad)" stroke="#2e4030" stroke-width="1.5"/>
+            <ellipse cx="120" cy="108" rx="54" ry="58" fill="url(#innerGrad)" opacity="0.7"/>
+            <path d="M100 130 Q105 110 120 105 Q135 110 140 130" stroke="#b6ff4e" stroke-width="2" fill="none" opacity="0.85"/>
+            <path d="M108 145 Q112 125 120 118 Q128 125 132 145" stroke="#b6ff4e" stroke-width="1.5" fill="none" opacity="0.6"/>
+            <rect x="90" y="182" width="60" height="12" rx="2" fill="#1e2e22" stroke="#2e4030" stroke-width="1"/>
+            <rect x="86" y="194" width="68" height="10" rx="2" fill="#172018" stroke="#2e4030" stroke-width="1"/>
+            <rect x="90" y="204" width="60" height="10" rx="2" fill="#1e2e22" stroke="#2e4030" stroke-width="1"/>
+            <rect x="94" y="214" width="52" height="10" rx="2" fill="#172018" stroke="#2e4030" stroke-width="1"/>
+            <line x1="88" y1="198" x2="152" y2="198" stroke="#2e4030" stroke-width="0.8" opacity="0.7"/>
+            <line x1="92" y1="208" x2="148" y2="208" stroke="#2e4030" stroke-width="0.8" opacity="0.7"/>
+            <rect x="100" y="224" width="40" height="8" rx="2" fill="#0d1210" stroke="#2e4030" stroke-width="1"/>
+            <defs>
+              <radialGradient id="bulbGrad" cx="50%" cy="45%" r="55%">
+                <stop offset="0%"  stop-color="#d4ff88" stop-opacity="0.25"/>
+                <stop offset="55%" stop-color="#1e2e22" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#0d1210" stop-opacity="0.8"/>
+              </radialGradient>
+              <radialGradient id="innerGrad" cx="50%" cy="40%" r="55%">
+                <stop offset="0%"  stop-color="#b6ff4e" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#b6ff4e" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+          </svg>
+          <div class="bulb-stats">
+            <div class="stat-chip">
+              <div class="val">80%</div>
+              <div class="lbl">Enerji Tasarrufu</div>
+            </div>
+            <div class="stat-chip">
+              <div class="val">25K</div>
+              <div class="lbl">Saat Ömür</div>
+            </div>
+            <div class="stat-chip">
+              <div class="val">0</div>
+              <div class="lbl">Cıva İçermez</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-inner">
+      <span><span class="ticker-item">Akıllı LED Ampuller</span><span class="ticker-sep">◆</span><span class="ticker-item">Hareket Sensörleri</span><span class="ticker-sep">◆</span><span class="ticker-item">Güneş Enerjisi Entegrasyonu</span><span class="ticker-sep">◆</span><span class="ticker-item">Enerji Analitiği</span><span class="ticker-sep">◆</span><span class="ticker-item">Karbon Nötr</span><span class="ticker-sep">◆</span><span class="ticker-item">Akıllı Kısma</span><span class="ticker-sep">◆</span><span class="ticker-item">Endüstriyel Aydınlatma</span><span class="ticker-sep">◆</span><span class="ticker-item">Akıllı Evler</span><span class="ticker-sep">◆</span><span class="ticker-item">Cıva İçermez</span><span class="ticker-sep">◆</span><span class="ticker-item">Eko Sertifikalı</span></span>
+      <span><span class="ticker-item">Akıllı LED Ampuller</span><span class="ticker-sep">◆</span><span class="ticker-item">Hareket Sensörleri</span><span class="ticker-sep">◆</span><span class="ticker-item">Güneş Enerjisi Entegrasyonu</span><span class="ticker-sep">◆</span><span class="ticker-item">Enerji Analitiği</span><span class="ticker-sep">◆</span><span class="ticker-item">Karbon Nötr</span><span class="ticker-sep">◆</span><span class="ticker-item">Akıllı Kısma</span><span class="ticker-sep">◆</span><span class="ticker-item">Endüstriyel Aydınlatma</span><span class="ticker-sep">◆</span><span class="ticker-item">Akıllı Evler</span><span class="ticker-sep">◆</span><span class="ticker-item">Cıva İçermez</span><span class="ticker-sep">◆</span><span class="ticker-item">Eko Sertifikalı</span></span>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section class="products reveal" id="products">
+    <div class="container">
+      <div class="products-intro">
+        <div>
+          <p class="section-label">Ürün Yelpazesi</p>
+          <h2 class="section-title">Her Mekân İçin<br/><em>Tasarlandı</em></h2>
+        </div>
+        <p>Mimari cephelerden samimi ev ortamlarına kadar Ledison'ın ürün yelpazesi, modern aydınlatma ihtiyaçlarının tamamını karşılar—her ürün, ışık kalitesinden ödün vermeksizin üstün verimlilik sunmak üzere tasarlanmıştır.</p>
+      </div>
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-icon">💡</div>
+          <div class="product-name">LED Ampuller</div>
+          <p class="product-desc">A+ sınıfı akıllı ampuller; %80 daha az enerji tüketimi ve 25.000 saatlik kullanım ömrüyle. Sıcak, serin ve gün ışığı spektrumlarında mevcuttur.</p>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🔦</div>
+          <div class="product-name">Ray & Spot</div>
+          <p class="product-desc">Perakende, galeri ve ticari alanlar için hassas yönlendirilebilir LED armatürler. 15° ile 60° arasında ışın açısı kontrolü.</p>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🌡️</div>
+          <div class="product-name">Akıllı Sensörler</div>
+          <p class="product-desc">Varlık, gün ışığı ve sıcaklık sensörleri; aydınlatma programlarını otomatikleştirerek israf edilen enerjiyi %40'a kadar azaltır.</p>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🏙️</div>
+          <div class="product-name">Sokak & Kentsel</div>
+          <p class="product-desc">Sert koşullar için üretilmiş yüksek lümenli sokak ve dış mekan armatürleri. 10 yıllık dayanıklılık garantisi.</p>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🏠</div>
+          <div class="product-name">Ev Sistemleri</div>
+          <p class="product-desc">Alexa, Google Home ve Apple HomeKit ile uyumlu tak-çalıştır akıllı ev kitleri—telefonunuzdan kontrol edin.</p>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">☀️</div>
+          <div class="product-name">Güneş Entegrasyonu</div>
+          <p class="product-desc">Dış mekanlar, yollar ve uzak lokasyonlar için bağımsız güneş enerjili LED paneller. Kurulum sonrası işletim maliyeti sıfır.</p>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🏭</div>
+          <div class="product-name">Endüstriyel Sınıf</div>
+          <p class="product-desc">Depolar, fabrikalar ve tehlikeli endüstriyel ortamlar için yüksek tavan ve patlamaya dayanıklı LED armatürler.</p>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">📊</div>
+          <div class="product-name">Enerji Panosu</div>
+          <p class="product-desc">Tüm bağlı tesislerde tüketimi, CO₂ tasarrufunu takip eden ve bakımı öngören gerçek zamanlı bulut analitiği.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION / VALUES -->
+  <section id="mission" class="reveal">
+    <div class="container">
+      <div class="values-wrap">
+        <div>
+          <p class="section-label">Misyonumuz</p>
+          <h2 class="section-title">Daha Yeşil Bir<br/>Dünyaya <em>Işık</em> Tutuyoruz</h2>
+          <p style="font-weight:300; color:var(--muted); line-height:1.8; margin-top:1rem;">
+            Her fotonun önemli olduğuna inanıyoruz. Ledison, aydınlatma inovasyonu ile çevresel sorumluluğun birbirinin karşıtı değil, birbirinden ayrılmaz olduğu ilkesiyle kuruldu.
+          </p>
+          <div class="values-list">
+            <div class="value-item">
+              <span class="value-num">01</span>
+              <div class="value-body">
+                <h4>Enerji Verimliliği</h4>
+                <p>LED'lerimiz akkor alternatiflere kıyasla %80'e kadar daha az enerji tüketir; hem elektrik faturalarını hem de şebeke yükünü düşürür.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <span class="value-num">02</span>
+              <div class="value-body">
+                <h4>Karbon Azaltımı</h4>
+                <p>Kurulan her Ledison ürünü, sertifikalı denkleştirme programımız aracılığıyla takip edilen ölçülebilir CO₂ azaltımına katkı sağlar.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <span class="value-num">03</span>
+              <div class="value-body">
+                <h4>Döngüsel Tasarım</h4>
+                <p>Uzun ömür ve kullanım sonu geri dönüşülebilirlik için mühendislik yapıyoruz. Ambalajlarımız %100 plastik içermez ve kompostlanabilir.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <span class="value-num">04</span>
+              <div class="value-body">
+                <h4>Akıllı Otomasyon</h4>
+                <p>Zeki sensörler ve programlama, gereksiz aşırı aydınlatmayı ortadan kaldırır—ışık yalnızca ihtiyaç duyulan yerde ve zamanda.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emission Card -->
+        <div class="values-chart-wrap">
+          <div class="emission-card">
+            <div class="emission-title">Yıllık Etki — 100 Ürün Başına</div>
+            <div class="emission-bars">
+              <div class="emission-row">
+                <div class="emission-meta">
+                  <span class="emission-label">CO₂ Azaltımı</span>
+                  <span class="emission-val">2,4 Ton</span>
+                </div>
+                <div class="emission-track"><div class="emission-fill" style="width:92%; --delay:0s"></div></div>
+              </div>
+              <div class="emission-row">
+                <div class="emission-meta">
+                  <span class="emission-label">kWh Tasarrufu</span>
+                  <span class="emission-val">3.200 kWh</span>
+                </div>
+                <div class="emission-track"><div class="emission-fill" style="width:78%; --delay:0.15s"></div></div>
+              </div>
+              <div class="emission-row">
+                <div class="emission-meta">
+                  <span class="emission-label">Geri Dönüşüm</span>
+                  <span class="emission-val">%98 Geri Dön.</span>
+                </div>
+                <div class="emission-track"><div class="emission-fill" style="width:98%; --delay:0.3s"></div></div>
+              </div>
+              <div class="emission-row">
+                <div class="emission-meta">
+                  <span class="emission-label">Ağaç Eşdeğeri</span>
+                  <span class="emission-val">18 Ağaç</span>
+                </div>
+                <div class="emission-track"><div class="emission-fill" style="width:60%; --delay:0.45s"></div></div>
+              </div>
+            </div>
+            <div class="emission-footer">
+              <div class="big">−80%</div>
+              <div class="caption">Geleneksel aydınlatma çözümlerine kıyasla<br/>ortalama karbon ayak izi azaltımı.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNOLOGY FEATURES -->
+  <section class="features reveal" id="technology">
+    <div class="container">
+      <p class="section-label">Teknoloji</p>
+      <h2 class="section-title">Farklı Üretildi,<br/><em>Daha İyi Üretildi</em></h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-tag">Çip-on-Board</div>
+          <h3>COB Teknolojisi</h3>
+          <p>Tescilli Chip-on-Board dizilerimiz; standart SMD tasarımlara kıyasla olağanüstü lümen yoğunluğu, düzgün ışık dağılımı ve %30 daha iyi termal yönetim sunar.</p>
+          <div class="feature-num">01</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-tag">Uyarlamalı Kısma</div>
+          <h3>0–10V & DALI Kontrol</h3>
+          <p>Sektör standardı kısma protokolleri, her bina yönetim sistemi ve akıllı ev platformuyla uyumluluğu garantiler.</p>
+          <div class="feature-num">02</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-tag">Termal Çekirdek</div>
+          <h3>ThermoGuard™ Gövde</h3>
+          <p>CFD simülasyonuyla geliştirilen özel alüminyum ısı emici geometrisi. Maksimum ömür için bağlantı sıcaklığını 65°C'nin altında tutar.</p>
+          <div class="feature-num">03</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-tag">Bağlantı</div>
+          <h3>Zigbee & Wi-Fi Mesh</h3>
+          <p>Merkezi olmayan ağ yapısı sayesinde tek hata noktası yoktur. Binlerce düğüm, tek bir birleşik kontrol paneli.</p>
+          <div class="feature-num">04</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-tag">Sertifikasyon</div>
+          <h3>Küresel Standartlar</h3>
+          <p>Tüm ürün yelpazemiz CE, RoHS, ENEC, DLC ve Energy Star sertifikalıdır. En zorlu küresel verimlilik direktiflerini karşılamak üzere üretilmiştir.</p>
+          <div class="feature-num">05</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-tag">Garanti</div>
+          <h3>10 Yıl Güvence</h3>
+          <p>Her Ledison armatürü, mühendislik kalitemizin arkasında durduğumuzun kanıtı olarak 10 yıllık değişim garantisiyle gelir.</p>
+          <div class="feature-num">06</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="reveal">
+    <div class="container">
+      <p class="section-label">Müşterilerimiz Ne Diyor</p>
+      <h2 class="section-title">Binlerce Kişinin <em>Güveni</em></h2>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"Depomuzda Ledison akıllı LED'lere geçtikten sonra ilk yılda elektrik faturamız %62 düştü. Yatırımın geri dönüşü beklediğimizden çok daha hızlı oldu."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">ME</div>
+            <div>
+              <div class="testi-name">Mehmet A.</div>
+              <div class="testi-role">Tesis Müdürü</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"Kurulum ekibi mükemmeldi. Tek bir uygulama üç binada 340 armatürü kontrol ediyor. Tam olarak ihtiyacımız olan buydu."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">AY</div>
+            <div>
+              <div class="testi-name">Ayşe K.</div>
+              <div class="testi-role">Sürdürülebilirlik Direktörü</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"10 yıllık garanti, yönetim kurulunun yatırımı hemen onaylamasını sağladı. Showroomumuzdaki ışık kalitesi gerçekten etkileyici."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">CA</div>
+            <div>
+              <div class="testi-name">Can D.</div>
+              <div class="testi-role">Perakende Direktörü</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band reveal" id="contact">
+    <h2>Geçiş Yapmaya Hazır mısınız?</h2>
+    <p>Ledison aydınlatmasıyla enerji ve gezegeni koruma yolunda binlerce ev ve işyerine katılın.</p>
+    <a href="mailto:merhaba@ledison.com.tr" class="btn-dark">Projenizi Başlatın</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">LEDISON<span>.</span></div>
+        <p class="footer-about">Daha parlak ve temiz bir dünya için yenilikçi LED aydınlatma çözümleri. Enerji verimliliği bir özellik değil—temelimizdir.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Ürünler</h5>
+        <ul>
+          <li><a href="#">LED Ampuller</a></li>
+          <li><a href="#">Akıllı Sensörler</a></li>
+          <li><a href="#">Ray & Spot</a></li>
+          <li><a href="#">Güneş Entegrasyonu</a></li>
+          <li><a href="#">Endüstriyel Sınıf</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Kurumsal</h5>
+        <ul>
+          <li><a href="#">Hakkımızda</a></li>
+          <li><a href="#">Sürdürülebilirlik</a></li>
+          <li><a href="#">Kariyer</a></li>
+          <li><a href="#">Basın</a></li>
+          <li><a href="#">İş Ortakları</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Destek</h5>
+        <ul>
+          <li><a href="#">Dökümanlar</a></li>
+          <li><a href="#">Garanti</a></li>
+          <li><a href="#">İletişim</a></li>
+          <li><a href="#">Kurulum Uzmanları</a></li>
+          <li><a href="#">SSS</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ledison. Tüm hakları saklıdır.</span>
+      <span>Daha <span class="accent">yeşil</span> bir yarın için tasarlandı.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Dynamic copyright year
+    document.querySelector('.footer-bottom span:first-child').textContent =
+      '© ' + new Date().getFullYear() + ' Ledison. Tüm hakları saklıdır.';
+
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      setTimeout(() => {
+        ring.style.left = e.clientX + 'px';
+        ring.style.top  = e.clientY + 'px';
+      }, 80);
+    });
+    document.querySelectorAll('a, button, .product-card, .feature-card').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.opacity = '0'; });
+      el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.opacity = '0.5'; });
+    });
+
+    // Nav scroll
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+</body>
+</html>
